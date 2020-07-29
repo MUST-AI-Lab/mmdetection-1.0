@@ -1,4 +1,5 @@
 from .anchor import *  # noqa: F401, F403
+from .attentions import *  # noqa: F401, F403
 from .bbox import *  # noqa: F401, F403
 from .evaluation import *  # noqa: F401, F403
 from .fp16 import *  # noqa: F401, F403

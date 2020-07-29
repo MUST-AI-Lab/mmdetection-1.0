@@ -123,6 +123,7 @@ class RoIAlign(nn.Module):
         self.aligned = aligned
         self.sample_num = int(sample_num)
         self.use_torchvision = use_torchvision
+
         assert not (use_torchvision and
                     aligned), 'Torchvision does not support aligned RoIAlgin'
 

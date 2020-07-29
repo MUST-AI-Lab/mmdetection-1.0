@@ -3,12 +3,11 @@ import torch.utils.checkpoint as cp
 from mmcv.cnn import constant_init, kaiming_init
 from mmcv.runner import load_checkpoint
 from torch.nn.modules.batchnorm import _BatchNorm
-from ..builder import build_attention
 from mmdet.ops import (ContextBlock, GeneralizedAttention, build_conv_layer,
                        build_norm_layer)
 from mmdet.utils import get_root_logger
 from ..registry import BACKBONES
-
+from mmdet.core.attentions.builder import build_attention
 
 class BasicBlock(nn.Module):
     expansion = 1
@@ -189,6 +188,8 @@ class Bottleneck(nn.Module):
             self.gen_attention_block = GeneralizedAttention(
                 planes, **gen_attention)
 
+
+        # attention
         if hasattr(self, 'attention') and self.attention is not None:
             self.attention['inplanes'] = planes * self.expansion
             self.attention = build_attention(attention)
@@ -510,18 +511,18 @@ class ResNet(nn.Module):
 
         # attention
         if hasattr(self, 'attention') and self.attention is not None:
-            for m in enumerate(self.layer1):
-                if hasattr(m, 'attentiion'):
-                    self.m.attention.init_weights()
-            for m in enumerate(self.layer2):
-                if hasattr(m, 'attentiion'):
-                    self.m.attention.init_weights()
-            for m in enumerate(self.layer3):
-                if hasattr(m, 'attentiion'):
-                    self.m.attention.init_weights()
-            for m in enumerate(self.layer4):
-                if hasattr(m, 'attentiion'):
-                    self.m.attention.init_weights()
+            for i, m in enumerate(self.layer1):
+                if hasattr(m, 'attention'):
+                    m.attention.init_weights()
+            for i, m in enumerate(self.layer2):
+                if hasattr(m, 'attention'):
+                    m.attention.init_weights()
+            for i, m in enumerate(self.layer3):
+                if hasattr(m, 'attention'):
+                    m.attention.init_weights()
+            for i, m in enumerate(self.layer4):
+                if hasattr(m, 'attention'):
+                    m.attention.init_weights()
 
     def forward(self, x):
         x = self.conv1(x)

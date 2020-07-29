@@ -1,10 +1,10 @@
 import torch.nn as nn
 import torch.nn.functional as F
 from mmcv.cnn import xavier_init
-from ..builder import build_attention
 from mmdet.core import auto_fp16
 from mmdet.ops import ConvModule
 from ..registry import NECKS
+from mmdet.core.attentions.builder import build_attention
 
 
 @NECKS.register_module
@@ -53,14 +53,14 @@ class FPN(nn.Module):
                  num_outs,
                  start_level=0,
                  end_level=-1,
-                 attention=None,
                  add_extra_convs=False,
                  extra_convs_on_inputs=True,
                  relu_before_extra_convs=False,
                  no_norm_on_lateral=False,
                  conv_cfg=None,
                  norm_cfg=None,
-                 act_cfg=None):
+                 act_cfg=None,
+                 attention=None):
         super(FPN, self).__init__()
         assert isinstance(in_channels, list)
         self.in_channels = in_channels
@@ -69,8 +69,8 @@ class FPN(nn.Module):
         self.num_outs = num_outs
         self.relu_before_extra_convs = relu_before_extra_convs
         self.no_norm_on_lateral = no_norm_on_lateral
-        self.attention = attention
         self.fp16_enabled = False
+        self.attention = attention
 
 
         if end_level == -1:
@@ -140,6 +140,9 @@ class FPN(nn.Module):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 xavier_init(m, distribution='uniform')
+
+        if hasattr(self, 'attention') and self.attention is not None:
+            self.attention.init_weights()
 
 
     @auto_fp16()

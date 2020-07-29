@@ -23,7 +23,6 @@ class TwoStageDetector(BaseDetector, RPNTestMixin, BBoxTestMixin,
                  shared_head=None,
                  rpn_head=None,
                  bbox_roi_extractor=None,
-                 attention=None,
                  bbox_head=None,
                  mask_roi_extractor=None,
                  mask_head=None,
@@ -42,13 +41,9 @@ class TwoStageDetector(BaseDetector, RPNTestMixin, BBoxTestMixin,
         if rpn_head is not None:
             self.rpn_head = builder.build_head(rpn_head)
 
-
-
         if bbox_head is not None:
             self.bbox_roi_extractor = builder.build_roi_extractor(
                 bbox_roi_extractor)
-            if attention is not None:
-                self.attention = builder.build_attention(attention)
             self.bbox_head = builder.build_head(bbox_head)
 
 
@@ -84,8 +79,6 @@ class TwoStageDetector(BaseDetector, RPNTestMixin, BBoxTestMixin,
             self.shared_head.init_weights(pretrained=pretrained)
         if self.with_rpn:
             self.rpn_head.init_weights()
-        if self.with_attention:
-            self.attention.init_weights()
         if self.with_bbox:
             self.bbox_roi_extractor.init_weights()
             self.bbox_head.init_weights()
@@ -100,13 +93,6 @@ class TwoStageDetector(BaseDetector, RPNTestMixin, BBoxTestMixin,
         x = self.backbone(img)
         if self.with_neck:
             x = self.neck(x)
-
-        # attention after neck
-        if self.with_attention:
-            y = list(x)
-            for i in range(len(x)):
-                y[i] = self.attention(x[i])
-            x = tuple(y)
 
         return x
 
@@ -230,10 +216,6 @@ class TwoStageDetector(BaseDetector, RPNTestMixin, BBoxTestMixin,
                 x[:self.bbox_roi_extractor.num_inputs], rois)
             if self.with_shared_head:
                 bbox_feats = self.shared_head(bbox_feats)
-
-            #attention after rpn align
-            if self.with_attention:
-               bbox_feats += self.attention(bbox_feats)
 
             cls_score, bbox_pred = self.bbox_head(bbox_feats)
 

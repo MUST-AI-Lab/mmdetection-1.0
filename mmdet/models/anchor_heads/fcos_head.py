@@ -5,9 +5,10 @@ from mmcv.cnn import normal_init
 from mmdet.core import distance2bbox, force_fp32, multi_apply, multiclass_nms
 from mmdet.ops import ConvModule, Scale
 from ..builder import build_loss
-from ..builder import build_attention
 from ..registry import HEADS
 from ..utils import bias_init_with_prob
+
+from mmdet.core.attentions.builder import build_attention
 
 INF = 1e8
 

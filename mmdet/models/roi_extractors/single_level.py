@@ -6,6 +6,8 @@ import torch.nn as nn
 from mmdet import ops
 from mmdet.core import force_fp32
 from ..registry import ROI_EXTRACTORS
+from mmdet.core.attentions.builder import build_attention
+
 
 
 @ROI_EXTRACTORS.register_module
@@ -26,13 +28,20 @@ class SingleRoIExtractor(nn.Module):
                  roi_layer,
                  out_channels,
                  featmap_strides,
-                 finest_scale=56):
+                 finest_scale=56,
+                 attention=None):
         super(SingleRoIExtractor, self).__init__()
         self.roi_layers = self.build_roi_layers(roi_layer, featmap_strides)
         self.out_channels = out_channels
         self.featmap_strides = featmap_strides
         self.finest_scale = finest_scale
         self.fp16_enabled = False
+        self.attention = attention
+
+        # attention
+        if hasattr(self, 'attention') and self.attention is not None:
+            self.attention = build_attention(self.attention)
+
 
     @property
     def num_inputs(self):
@@ -40,7 +49,9 @@ class SingleRoIExtractor(nn.Module):
         return len(self.featmap_strides)
 
     def init_weights(self):
-        pass
+        # attention
+        if hasattr(self, 'attention') and self.attention is not None:
+            self.attention.init_weights()
 
     def build_roi_layers(self, layer_cfg, featmap_strides):
         cfg = layer_cfg.copy()
@@ -49,6 +60,7 @@ class SingleRoIExtractor(nn.Module):
         layer_cls = getattr(ops, layer_type)
         roi_layers = nn.ModuleList(
             [layer_cls(spatial_scale=1 / s, **cfg) for s in featmap_strides])
+
         return roi_layers
 
     def map_roi_levels(self, rois, num_levels):
@@ -103,7 +115,13 @@ class SingleRoIExtractor(nn.Module):
             if inds.any():
                 rois_ = rois[inds, :]
                 roi_feats_t = self.roi_layers[i](feats[i], rois_)
+
+                # attention
+                if hasattr(self, 'attention') and self.attention is not None:
+                    roi_feats_t = self.attention(roi_feats_t) + roi_feats_t
+
                 roi_feats[inds] = roi_feats_t
+
         if not return_levels:
             return roi_feats
         else:
