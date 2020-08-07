@@ -1,10 +1,10 @@
 # model settings
 model = dict(
     type='FCOS',
-    pretrained='open-mmlab://resnet50_caffe',
+    pretrained='open-mmlab://resnet101_caffe',
     backbone=dict(
         type='ResNet',
-        depth=50,
+        depth=101,
         num_stages=4,
         out_indices=(0, 1, 2, 3),
         frozen_stages=1,
@@ -21,7 +21,7 @@ model = dict(
         relu_before_extra_convs=True),
     bbox_head=dict(
         type='FCOSHead',
-        num_classes=16,
+        num_classes=14,
         in_channels=256,
         stacked_convs=4,
         feat_channels=256,
