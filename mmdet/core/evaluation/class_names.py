@@ -4,6 +4,11 @@ import mmcv
 def wider_face_classes():
     return ['face']
 
+def vhr10_classes():
+    return ['airplane','ship','storage tank','baseball diamond',
+               'tennis court','basketball court','ground track field',
+               'habor','bridge','vehicle']
+
 def hrrsd_classes():
     return ['airplane','baseball diamond', 'basketball court', 'bridge',
             'crossroad', 'ground track field', 'harbor', 'parking lot',

@@ -11,12 +11,12 @@ from .moon_crater import MOONCraterDataset
 from .xml_style import XMLDataset
 from .DIOR import DIORDataset
 from .HRRSD import HRRSDDataset
-
+from .VHR10 import VHR10Dataset
 
 __all__ = [
     'CustomDataset', 'XMLDataset', 'CocoDataset', 'VOCDataset',
     'CityscapesDataset', 'GroupSampler', 'DistributedGroupSampler',
     'build_dataloader', 'ConcatDataset', 'RepeatDataset', 'WIDERFaceDataset',
     'MOONCraterDataset', 'DATASETS', 'build_dataset', 'DIORDataset',
-    'HRRSDDataset'
+    'HRRSDDataset', 'VHR10Dataset'
 ]
