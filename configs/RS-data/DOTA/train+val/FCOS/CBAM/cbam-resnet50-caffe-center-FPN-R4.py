@@ -28,7 +28,7 @@ model = dict(
            kernel_size=7)),
     bbox_head=dict(
         type='FCOSHead',
-        num_classes=16,
+        num_classes=17,
         in_channels=256,
         stacked_convs=4,
         feat_channels=256,
@@ -62,7 +62,7 @@ test_cfg = dict(
     nms=dict(type='nms', iou_thr=0.5),
     max_per_img=-1)
 # dataset settings
-dataset_type = 'DOTADataset'
+dataset_type = 'DOTA1_5Dataset'
 data_root = 'data/'
 img_norm_cfg = dict(
     mean=[102.9801, 115.9465, 122.7717], std=[1.0, 1.0, 1.0], to_rgb=False)
@@ -96,18 +96,18 @@ data = dict(
     workers_per_gpu=2,
     train=dict(
         type=dataset_type,
-        ann_file= data_root + 'DOTA/ImageSets/Main/train.txt',
-        img_prefix= data_root + 'DOTA/',
+        ann_file=data_root + 'DOTA/train1024/DOTA1_5_train1024.json',
+        img_prefix=data_root + 'DOTA/train1024/images',
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
-        ann_file=data_root + 'DOTA/ImageSets/Main/val.txt',
-        img_prefix=data_root + 'DOTA/',
+        ann_file=data_root + 'DOTA/val1024/DOTA1_5_val1024.json',
+        img_prefix=data_root + 'DOTA/val1024/images',
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + 'DOTA/ImageSets/Main/val.txt',
-        img_prefix=data_root + 'DOTA/',
+        ann_file=data_root + 'DOTA/test1024/DOTA1_5_test1024.json',
+        img_prefix=data_root + 'DOTA/test1024/images',
         pipeline=test_pipeline))
 # optimizer
 optimizer = dict(

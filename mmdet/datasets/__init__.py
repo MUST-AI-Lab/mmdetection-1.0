@@ -12,11 +12,13 @@ from .xml_style import XMLDataset
 from .DIOR import DIORDataset
 from .HRRSD import HRRSDDataset
 from .VHR10 import VHR10Dataset
+from .DOTA1_5 import DOTA1_5Dataset, DOTA1_5Dataset_v3, DOTA1_5Dataset_v2
 
 __all__ = [
     'CustomDataset', 'XMLDataset', 'CocoDataset', 'VOCDataset',
     'CityscapesDataset', 'GroupSampler', 'DistributedGroupSampler',
     'build_dataloader', 'ConcatDataset', 'RepeatDataset', 'WIDERFaceDataset',
     'MOONCraterDataset', 'DATASETS', 'build_dataset', 'DIORDataset',
-    'HRRSDDataset', 'VHR10Dataset'
+    'HRRSDDataset', 'VHR10Dataset', 'DOTA1_5Dataset', 'DOTA1_5DAtaset_v3',
+    'DOTA1_5Dataset_v2' 
 ]

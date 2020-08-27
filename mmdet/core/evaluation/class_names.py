@@ -24,11 +24,11 @@ def dior_classes():
             'vehicle','windmill','Expressway-toll-station'
     ]
 
-def dota_classes():
-    return ['large-vehicle', 'swimming-pool', 'helicopter', 'bridge',
-               'plane', 'ship', 'soccer-ball-field', 'basketball-court',
-               'ground-track-field', 'small-vehicle', 'harbor', 'baseball-diamond',
-               'tennis-court', 'roundabout', 'storage-tank', 'container-crane'
+def dota1_5_classes():
+    return ['plane', 'baseball-diamond', 'bridge', 'ground-track-field',
+                'small-vehicle', 'large-vehicle', 'ship', 'tennis-court',
+                'basketball-court', 'storage-tank', 'soccer-ball-field', 'roundabout',
+                'harbor', 'swimming-pool', 'helicopter', 'container-crane'
     ]
 
 def voc_classes():
