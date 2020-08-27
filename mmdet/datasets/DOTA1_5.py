@@ -1,6 +1,8 @@
 from .coco import CocoDataset
 import numpy as np
+from .registry import DATASETS
 
+@DATASETS.register_module
 class DOTA1_5Dataset(CocoDataset):
 
     CLASSES = ('plane', 'baseball-diamond',
@@ -12,6 +14,8 @@ class DOTA1_5Dataset(CocoDataset):
                 'harbor', 'swimming-pool',
                 'helicopter', 'container-crane')
 
+
+@DATASETS.register_module
 class DOTA1_5Dataset_v2(CocoDataset):
     # Note! same with DOTA2_v3
     CLASSES = ('plane', 'baseball-diamond',
@@ -87,6 +91,7 @@ class DOTA1_5Dataset_v2(CocoDataset):
             ann['poly_lens'] = gt_poly_lens
         return ann
 
+@DATASETS.register_module
 class DOTA1_5Dataset_v3(CocoDataset):
 
     CLASSES = ('plane', 'baseball-diamond',
