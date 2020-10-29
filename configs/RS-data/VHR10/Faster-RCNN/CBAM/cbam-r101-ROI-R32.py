@@ -45,7 +45,7 @@ model = dict(
         in_channels=256,
         fc_out_channels=1024,
         roi_feat_size=7,
-        num_classes=14,
+        num_classes=11,
         target_means=[0., 0., 0., 0.],
         target_stds=[0.1, 0.1, 0.2, 0.2],
         reg_class_agnostic=False,
@@ -106,14 +106,14 @@ test_cfg = dict(
     # e.g., nms=dict(type='soft_nms', iou_thr=0.5, min_score=0.05)
 )
 # dataset settings
-dataset_type = 'HRRSDDataset'
+dataset_type = 'VHR10Dataset'
 data_root = 'data/'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations', with_bbox=True),
-    dict(type='Resize', img_scale=(227, 227), keep_ratio=True),
+    dict(type='Resize', img_scale=(800, 800), keep_ratio=True),
     dict(type='RandomFlip', flip_ratio=0.5),
     dict(type='Normalize', **img_norm_cfg),
     dict(type='Pad', size_divisor=32),
@@ -124,7 +124,7 @@ test_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(
         type='MultiScaleFlipAug',
-        img_scale=(227, 227),
+        img_scale=(800, 800),
         flip=False,
         transforms=[
             dict(type='Resize', keep_ratio=True),
@@ -139,31 +139,31 @@ data = dict(
     imgs_per_gpu=2,
     workers_per_gpu=2,
     train=dict(
-       type=dataset_type,
-       ann_file= data_root + 'HRRSD/ImageSets/Main/trainval.txt',
-       img_prefix= data_root + 'HRRSD/',
-       pipeline=train_pipeline),
+        type=dataset_type,
+        ann_file=data_root + 'VHR10/ImageSets/Main/trainval.txt',
+        img_prefix=data_root + 'VHR10/',
+        pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
-        ann_file=data_root + 'HRRSD/ImageSets/Main/test.txt',
-        img_prefix=data_root + 'HRRSD/',
+        ann_file=data_root + 'VHR10/ImageSets/Main/test.txt',
+        img_prefix=data_root + 'VHR10/',
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + 'HRRSD/ImageSets/Main/test.txt',
-        img_prefix=data_root + 'HRRSD/',
+        ann_file=data_root + 'VHR10/ImageSets/Main/test.txt',
+        img_prefix=data_root + 'VHR10/',
         pipeline=test_pipeline))
 # optimizer
 optimizer = dict(type='SGD', lr=0.0025, momentum=0.9, weight_decay=0.0001)
 optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
 # learning policy
-lr_config = dict(
-    policy='step',
-    warmup='linear',
-    warmup_iters=500,
-    warmup_ratio=1.0 / 3,
-    step=[8, 11])
-#lr_config = dict(policy='step', step=[3]) 
+# lr_config = dict(
+#     policy='step',
+#     warmup='linear',
+#     warmup_iters=500,
+#     warmup_ratio=1.0 / 3,
+#     step=[8, 11])
+lr_config = dict(policy='step', step=[8, 11])
 checkpoint_config = dict(interval=1)
 evaluation = dict(interval=12)
 # yapf:disable

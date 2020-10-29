@@ -30,7 +30,7 @@ model = dict(
         relu_before_extra_convs=True),
     bbox_head=dict(
         type='FCOSHead',
-        num_classes=21,
+        num_classes=11,
         in_channels=256,
         stacked_convs=4,
         feat_channels=256,
@@ -64,7 +64,7 @@ test_cfg = dict(
     nms=dict(type='nms', iou_thr=0.5),
     max_per_img=-1)
 # dataset settings
-dataset_type = 'DIORDataset'
+dataset_type = 'VHR10Dataset'
 data_root = 'data/'
 img_norm_cfg = dict(
     mean=[102.9801, 115.9465, 122.7717], std=[1.0, 1.0, 1.0], to_rgb=False)
@@ -98,18 +98,18 @@ data = dict(
     workers_per_gpu=2,
     train=dict(
         type=dataset_type,
-        ann_file= data_root + 'DIOR/ImageSets/Main/trainval.txt',
-        img_prefix= data_root + 'DIOR/',
+        ann_file=data_root + 'VHR10/ImageSets/Main/trainval.txt',
+        img_prefix=data_root + 'VHR10/',
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
-        ann_file=data_root + 'DIOR/ImageSets/Main/test.txt',
-        img_prefix=data_root + 'DIOR/',
+        ann_file=data_root + 'VHR10/ImageSets/Main/test.txt',
+        img_prefix=data_root + 'VHR10/',
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + 'DIOR/ImageSets/Main/test.txt',
-        img_prefix=data_root + 'DIOR/',
+        ann_file=data_root + 'VHR10/ImageSets/Main/test.txt',
+        img_prefix=data_root + 'VHR10/',
         pipeline=test_pipeline))
 # optimizer
 optimizer = dict(
@@ -120,12 +120,13 @@ optimizer = dict(
     paramwise_options=dict(bias_lr_mult=2., bias_decay_mult=0.))
 optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
 # learning policy
-lr_config = dict(
-    policy='step',
-    warmup='constant',
-    warmup_iters=500,
-    warmup_ratio=1.0 / 3,
-    step=[8, 11])
+# lr_config = dict(
+#     policy='step',
+#     warmup='linear',
+#     warmup_iters=500,
+#     warmup_ratio=1.0 / 3,
+#     step=[8, 11])
+lr_config = dict(policy='step', step=[8, 11])
 checkpoint_config = dict(interval=1)
 evaluation = dict(interval=12)
 # yapf:disable

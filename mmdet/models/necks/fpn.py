@@ -155,6 +155,11 @@ class FPN(nn.Module):
             for i, lateral_conv in enumerate(self.lateral_convs)
         ]
 
+        # attention shared parameters
+        # for i in range(len(laterals)):
+        #     if hasattr(self, 'attention') and self.attention is not None:
+        #         self.attention(laterals[i])
+
         # build top-down path
         used_backbone_levels = len(laterals)
         for i in range(used_backbone_levels - 1, 0, -1):
@@ -187,9 +192,10 @@ class FPN(nn.Module):
                     else:
                         outs.append(self.fpn_convs[i](outs[-1]))
 
-        #attention
+        # attention non-shared parameters
         if hasattr(self,'attention') and self.attention is not None:
             for i in range(len(outs)):
-                outs[i] = self.attention(outs[i]) + outs[i]
+                outs[i] = self.attention(outs[i])
+
 
         return tuple(outs)
