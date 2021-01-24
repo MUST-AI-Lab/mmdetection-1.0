@@ -22,8 +22,6 @@ class SENet(nn.Module):
                       kernel_size=(1, 1), stride=(1, 1), bias=self.bias)
         self.sigmoid = nn.Sigmoid()
 
-
-
     def init_weights(self):
         normal_init(self.fc1, std=0.01)
         normal_init(self.fc2, std=0.01)
@@ -35,6 +33,6 @@ class SENet(nn.Module):
         x = self.relu(x)
         x = self.fc2(x)
         x = self.sigmoid(x)
-        return module_input * x
+        return module_input * x + module_input
 
 
